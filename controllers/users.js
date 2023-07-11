@@ -62,7 +62,7 @@ module.exports.updateUserAbout = (req, res) => {
     .findByIdAndUpdate(
       req.user._id,
       { name, about },
-      { runValidators: true },
+      { runValidators: true, new: true },
     ).then((user) => {
       if (!user) {
         res.status(404)
@@ -87,6 +87,7 @@ module.exports.updateUserAvatar = (req, res) => {
     .findByIdAndUpdate(
       req.user._id,
       { avatar },
+      { runValidators: true, new: true },
     ).then((user) => {
       if (!user) {
         res.status(404)
