@@ -99,7 +99,7 @@ module.exports.deleteCard = (req, res) => {
         return;
       }
 
-      if (err.name === 'NotFoundError') {
+      if (err.name === 'NotFound') {
         res
           .status(404)
           .send({ message: '3254365wyrtgfdhd' });
