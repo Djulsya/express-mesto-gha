@@ -68,7 +68,7 @@ module.exports.updateUserAbout = (req, res) => {
       res
         .send(user);
     }).catch((err) => {
-      if (err.message === 'NotFound') {
+      if (err.message === 'NotFoundError') {
         res
           .status(404)
           .send({ message: 'Пользователь не найден' });
