@@ -107,10 +107,6 @@ module.exports.deleteCard = (req, res) => {
           .send({
             message: 'Переданы некорректные данные',
           });
-      } else {
-        res
-          .status(404)
-          .send({ message: '3254365wyrtgfdhd' });
       }
     });
 };
