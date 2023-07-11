@@ -89,27 +89,21 @@ module.exports.createCard = (req, res) => {
 };
 
 module.exports.deleteCard = (req, res) => {
-  Card
-    .findByIdAndDelete(
-      req.params.cardId,
-      { $addToSet: { cards: req.user._id } },
-      { new: true },
-    )
-    .then(() => res.send({ message: 'Карточка удалена' }))
+  const { cardId } = req.params;
+  return Card
+    .findByIdAndDelete(cardId)
+    .then(() => res.status(200).send({ message: 'Карточка удалена' }))
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(400)
           .send({
             message: 'Переданы некорректные данные',
           });
-        return;
       }
-
       if (err.name === 'NotFoundError') {
         res
           .status(404)
           .send({ message: '3254365wyrtgfdhd' });
-        return;
       }
       res
         .status(500)
