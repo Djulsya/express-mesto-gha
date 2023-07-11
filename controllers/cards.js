@@ -6,7 +6,8 @@ module.exports.addLike = (req, res) => {
       req.params.cardId,
       { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
       { new: true },
-    ).then((card) => {
+    ).orFail(() => new Error('NotFoundError'))
+    .then((card) => {
       if (!card) {
         res
           .status(404)
@@ -21,8 +22,8 @@ module.exports.addLike = (req, res) => {
           .status(404)
           .send({ message: 'Карточка не найдена' });
       } else {
-        res.status(400)
-          .send({ message: 'Переданы некорректные данные' });
+        res.status(500)
+          .send({ message: 'Ошибка сервера' });
       }
     });
 };
@@ -33,7 +34,8 @@ module.exports.deleteLike = (req, res) => {
       req.params.cardId,
       { $pull: { likes: req.user._id } }, // убрать _id из массива
       { new: true },
-    ).then((card) => {
+    ).orFail(() => new Error('NotFoundError'))
+    .then((card) => {
       if (!card) {
         res
           .status(404)
@@ -46,12 +48,12 @@ module.exports.deleteLike = (req, res) => {
     .catch((err) => {
       if (err.name === 'NotFoundError') {
         res
-          .status(500)
-          .send({ message: 'Ошибка сервера' });
-      } else {
-        res
           .status(400)
           .send({ message: 'Переданы некорректные данные' });
+      } else {
+        res
+          .status(500)
+          .send({ message: 'Ошибка сервера' });
       }
     });
 };
@@ -65,8 +67,8 @@ module.exports.getCards = (req, res) => {
           .status(200)
           .send(cards)),
     ).catch(() => res
-      .status(400)
-      .send({ message: 'Переданы некорректные данные' }));
+      .status(500)
+      .send({ message: 'Ошибка сервера' }));
 };
 
 module.exports.createCard = (req, res) => {
@@ -80,16 +82,16 @@ module.exports.createCard = (req, res) => {
         .send(card);
     })
     .catch((err) => {
-      if (err.name === 'ValidError') {
+      if (err.name === 'ValidationError') {
         res
-          .status(500)
+          .status(400)
           .send({
-            message: 'Ошибка сервера',
+            message: 'Переданы некорректные данные',
           });
       } else {
         res
-          .status(400)
-          .send({ message: 'Переданы некорректные данные' });
+          .status(500)
+          .send({ message: 'Ошибка сервера' });
       }
     });
 };
@@ -115,6 +117,10 @@ module.exports.deleteCard = (req, res) => {
           .send({
             message: 'Переданы некорректные данные',
           });
+      } else {
+        res
+          .status(500)
+          .send({ message: 'Ошибка сервера' });
       }
     });
 };

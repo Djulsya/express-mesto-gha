@@ -5,9 +5,9 @@ const { ObjectId } = mongoose.Schema.Types;
 const cardSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: true,
-    minlength: 2,
-    maxlength: 30,
+    required: [true, 'Поле "Имя" должно быть заполнено'],
+    minlength: [2, 'Минимальная длина поля "Имя" - 2'],
+    maxlength: [30, 'Максимальная длина поля "Имя" - 30'],
   },
 
   link: {
