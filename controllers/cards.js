@@ -1,24 +1,29 @@
 const Card = require('../models/card');
 
 module.exports.addLike = (req, res) => {
-  const { cardId } = req.params;
-
-  return Card.findByIdAndUpdate(
-    cardId,
-    { $addToSet: { likes: req.user._id } },
-    { new: true },
-  )
-    .then((updatedCard) => {
-      if (!updatedCard) {
-        res.status(404).send({ message: '777777' });
+  Card
+    .findByIdAndUpdate(
+      req.params.cardId,
+      { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
+      { new: true },
+    )
+    .then((cards) => {
+      if (!cards) {
+        res
+          .status(404)
+          .send({ message: 'Карточка не найдена' });
       }
-      res.send(updatedCard);
+      res
+        .send(cards);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).send({ message: '123' });
+        res
+          .status(400)
+          .send({ message: 'Переданы некорректные данные' });
       }
-      res.status(500).send({ message: 'Ошибка сервера' });
+      res
+        .status(500).send({ message: 'Ошибка сервера' });
     });
 };
 
@@ -28,18 +33,18 @@ module.exports.deleteLike = (req, res) => {
       req.params.cardId,
       { $pull: { likes: req.user._id } }, // убрать _id из массива
       { new: true },
-    ).orFail(() => new Error('NotFoundError'))
-    .then((card) => {
-      if (!card) {
+    )
+    .then((cards) => {
+      if (!cards) {
         res
           .status(404)
           .send({ message: 'Карточка не найдена' });
       }
       res
-        .send(card);
+        .send(cards);
     })
     .catch((err) => {
-      if (err.name === 'NotFoundError') {
+      if (err.name === 'CastError') {
         res
           .status(400)
           .send({ message: 'Переданы некорректные данные' });
