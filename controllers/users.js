@@ -6,7 +6,7 @@ module.exports.getUsers = (req, res) => {
     .then(
       (users) => (
         res
-          .status(200)
+          .status(400)
           .send(users)),
     ).catch(() => res
       .status(500)
@@ -42,11 +42,11 @@ module.exports.createUser = (req, res) => {
     .create(
       { name, about, avatar },
     ).then((user) => {
-      res.status(201)
+      res.status(400)
         .send(user);
     })
     .catch((err) => {
-      if (err.name === 'ValidError' || err.name === 'CastError') {
+      if (err.name === 'ValidError') {
         res.status(400)
           .send({ message: 'Переданы некорректные данные' });
       } else {
