@@ -44,9 +44,6 @@ module.exports.createUser = (req, res) => {
       if (err.name === 'ValidError') {
         res.status(400)
           .send({ message: 'Переданы некорректные данные' });
-      } else {
-        res.status(400)
-          .send({ message: 'Ошибка сервера' });
       }
     });
 };
