@@ -91,12 +91,8 @@ module.exports.createCard = (req, res) => {
 module.exports.deleteCard = (req, res) => {
   const { cardId } = req.params;
   return Card
-    .findByIdAndDelete(
-      req.card._id,
-      { cardId },
-      { runValidators: true, new: true },
-    )
-    .then(() => res.send({ message: 'Фотография удалена' }))
+    .findByIdAndDelete(cardId)
+    .then(() => res.send({ message: 'Карточка удалена' }))
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(400)
@@ -104,6 +100,7 @@ module.exports.deleteCard = (req, res) => {
             message: 'Переданы некорректные данные',
           });
       }
+
       if (err.name === 'NotFoundError') {
         res
           .status(404)
