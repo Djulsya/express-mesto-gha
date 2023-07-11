@@ -1,6 +1,6 @@
 const User = require('../models/user');
 
-module.exports.getCards = (req, res) => {
+module.exports.getUsers = (req, res) => {
   User
     .find({})
     .then(
