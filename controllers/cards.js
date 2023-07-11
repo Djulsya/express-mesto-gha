@@ -101,10 +101,10 @@ module.exports.deleteCard = (req, res) => {
       if (err.name === 'CastError') {
         res.status(400)
           .send({
-            message: 'Переданы некорректные данные',
+            message: 'ФАПЫАПЛЬКЕВОТОРЛБЛОРПАЫПВРТМЬ',
           });
       }
-      if (err.message === 'NotFoundError') {
+      if (err.name === 'NotFoundError') {
         res
           .status(400)
           .send({ message: 'Переданы некорректные данные' });
