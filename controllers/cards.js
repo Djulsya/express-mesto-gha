@@ -20,7 +20,7 @@ module.exports.addLike = (req, res) => {
           .status(404)
           .send({ message: 'Переданы некорректные данные' });
       } else {
-        res.status(500)
+        res.status(400)
           .send({ message: 'Ошибка сервера' });
       }
     });
@@ -46,7 +46,7 @@ module.exports.deleteLike = (req, res) => {
           .status(400)
           .send({ message: 'Переданы некорректные данные' });
       } else {
-        res.status(500)
+        res.status(400)
           .send({ message: 'Ошибка сервера' });
       }
     });
@@ -61,7 +61,7 @@ module.exports.getCards = (req, res) => {
           .status(200)
           .send(cards)),
     ).catch(() => res
-      .status(500)
+      .status(400)
       .send({ message: 'Ошибка сервера' }));
 };
 
@@ -82,7 +82,7 @@ module.exports.createCard = (req, res) => {
             message: 'Переданы некорректные данные в методы создания',
           });
       } else {
-        res.status(500)
+        res.status(400)
           .send({ message: 'Ошибка сервера' });
       }
     });
@@ -104,7 +104,7 @@ module.exports.deleteCard = (req, res) => {
             message: 'Переданы некорректные данные',
           });
       } else {
-        res.status(500)
+        res.status(400)
           .send({ message: 'Ошибка сервера' });
       }
     });
