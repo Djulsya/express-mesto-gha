@@ -9,7 +9,7 @@ module.exports.getUsers = (req, res) => {
           .status(200)
           .send(users)),
     ).catch(() => res
-      .status(500)
+      .status(400)
       .send({ message: 'Ошибка сервера' }));
 };
 
@@ -30,7 +30,7 @@ module.exports.getUserId = (req, res) => {
         res.status(400)
           .send({ message: 'Переданы некорректные данные' });
       } else {
-        res.status(500)
+        res.status(400)
           .send({ message: 'Ошибка сервера' });
       }
     });
@@ -50,7 +50,7 @@ module.exports.createUser = (req, res) => {
         res.status(400)
           .send({ message: 'Переданы некорректные данные' });
       } else {
-        res.status(500)
+        res.status(400)
           .send({ message: 'Ошибка сервера' });
       }
     });
@@ -76,7 +76,7 @@ module.exports.updateUserAbout = (req, res) => {
         res.status(400)
           .send({ message: 'Переданы некорректные данные' });
       } else {
-        res.status(500)
+        res.status(400)
           .send({ message: 'Ошибка сервера' });
       }
     });
