@@ -6,7 +6,7 @@ module.exports.getUsers = (req, res) => {
     .then(
       (users) => (
         res
-          .status(400)
+          .status(200)
           .send(users)),
     ).catch(() => res
       .status(500)
@@ -42,7 +42,7 @@ module.exports.createUser = (req, res) => {
     .create(
       { name, about, avatar },
     ).then((user) => {
-      res.status(400)
+      res.status(201)
         .send(user);
     })
     .catch((err) => {
