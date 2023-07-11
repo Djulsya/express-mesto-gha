@@ -15,24 +15,17 @@ module.exports.getUsers = (req, res) => {
 
 module.exports.getUserId = (req, res) => {
   const { userId } = req.params;
-  User
-    .findById(userId)
-    // eslint-disable-next-line consistent-return
-    .then((user) => {
-      if (!user) {
-        return res.status(404)
-          .send({ message: 'Пользователь не найден' });
-      }
-      res.send(user);
-    })
-    // eslint-disable-next-line consistent-return
+  return User.findById(userId)
+    .orFail(() => new Error('NotFound'))
+    .then((user) => res.status(200).send(user))
     .catch((err) => {
       if (err.name === 'CastError') {
-        return res.status(400)
-          .send({ message: 'Переданы некорректные данные' });
+        res.status(400).send({ message: 'Переданы некорректные данные' });
+      } else if (err.message === 'NotFound') {
+        res.status(404).send({ message: 'Пользователь не найден' });
+      } else {
+        res.status(500).send({ message: 'Ошибка сервера' });
       }
-      res.status(500)
-        .send({ message: 'Ошибка сервера' });
     });
 };
 
