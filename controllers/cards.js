@@ -92,10 +92,14 @@ module.exports.deleteCard = (req, res) => {
   const { cardId } = req.params;
   return Card
     .findByIdAndDelete(cardId)
-    .then((card) => {
-      res
-        .status(200)
-        .send(card);
+    .then((delCard) => {
+      if (!delCard) {
+        res
+          .status(404)
+          .send({
+            message: '12345647589',
+          });
+      }
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -103,10 +107,6 @@ module.exports.deleteCard = (req, res) => {
           .send({
             message: 'ФАПЫАПЛЬКЕВОТОРЛБЛОРПАЫПВРТМЬ',
           });
-      } else {
-        res
-          .status(400)
-          .send({ message: 'Переданы некорректные данные' });
       }
     });
 };
