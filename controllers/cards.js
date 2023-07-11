@@ -92,20 +92,14 @@ module.exports.deleteCard = (req, res) => {
   const { cardId } = req.params;
   return Card
     .findByIdAndDelete(cardId)
-    .then(() => res.status(200).send({ message: '32463247356hfdg' }))
-    .then(() => {
-      res
-        .status(404)
-        .send({
-          message: 'Карточка не найдена',
-        });
-    })
+    .then((card) => res.status(200).send(card))
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(404)
-          .send({
-            message: 'Переданы некорректные данные',
-          });
+        res.status(404).send({ message: 'Переданы некорректные данные' });
+      } else if (err.message === 'NotFound') {
+        res.status(400).send({ message: 'Карточка не найдена' });
+      } else {
+        res.status(500).send({ message: 'Ошибка сервера' });
       }
     });
 };
