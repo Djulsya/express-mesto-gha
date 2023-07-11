@@ -17,19 +17,19 @@ module.exports.getUserId = (req, res) => {
   const { userId } = req.params;
   return User
     .findById(userId)
-    .then((user) => {
-      if (!user) {
+    .then((userId) => {
+      if (!userId) {
         res
           .status(404)
           .send({ message: 'Пользователь не найден' });
       } else {
         res
-          .send(user);
+          .send(userId);
       }
     })
     .catch(() => {
       res
-        .status(400)
+        .status(500)
         .send({ message: 'Ошибка fhgkghj сервера' });
     });
 };
