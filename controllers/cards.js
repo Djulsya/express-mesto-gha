@@ -8,9 +8,16 @@ module.exports.addLike = (req, res) => {
   ).then((card) => {
     if (!card) {
       res.status(404).send({ message: 'Карточка не найдена' });
-      return;
+    } else {
+      res.send(card);
     }
-    res.send(card);
+  }).catch((err) => {
+    if (err.message === 'NotFoundError') {
+      res.status(404)
+        .send({ message: 'ППереданы некорректные данные' });
+    } else {
+      res.status(500).send({ message: 'Ошибка сервера' });
+    }
   });
 };
 
@@ -22,10 +29,19 @@ module.exports.deleteLike = (req, res) => {
   ).then((card) => {
     if (!card) {
       res.status(404).send({ message: 'Карточка не найдена' });
-      return;
+    } else {
+      res.send(card);
     }
-    res.send(card);
-  });
+  })
+    .catch((err) => {
+      if (err.name === 'NotFoundError') {
+        res
+          .status(400)
+          .send({ message: 'Переданы некорректные данные' });
+      } else {
+        res.status(500).send({ message: 'Ошибка сервера' });
+      }
+    });
 };
 
 module.exports.getCards = (req, res) => {
