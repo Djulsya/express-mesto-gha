@@ -17,7 +17,7 @@ module.exports.getUserId = (req, res) => {
   const { userId } = req.params;
   return User
     .findById(userId)
-    .then((userId) => {
+    .then(() => {
       if (!userId) {
         res
           .status(404)
