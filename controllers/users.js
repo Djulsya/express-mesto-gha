@@ -42,6 +42,9 @@ module.exports.createUser = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidError') {
+        res.status(500)
+          .send({ message: 'Ошибка сервера' });
+      } else {
         res.status(400)
           .send({ message: 'Переданы некорректные данные' });
       }
@@ -65,11 +68,11 @@ module.exports.updateUserAbout = (req, res) => {
         return;
       }
       if (err.name === 'ValidError') {
-        res.status(400)
-          .send({ message: 'Переданы некорректные данные' });
+        res.status(500)
+          .send({ message: 'Ошибка сервера' });
       } else {
         res.status(400)
-          .send({ message: 'Ошибка сервера' });
+          .send({ message: 'Переданы некорректные данные' });
       }
     });
 };

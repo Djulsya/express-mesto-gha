@@ -21,7 +21,7 @@ module.exports.addLike = (req, res) => {
           .send({ message: 'Переданы некорректные данные' });
       } else {
         res.status(400)
-          .send({ message: 'Ошибка сервера' });
+          .send({ message: 'Переданы некорректные данные' });
       }
     });
 };
@@ -43,11 +43,11 @@ module.exports.deleteLike = (req, res) => {
     .catch((err) => {
       if (err.name === 'NotFoundError') {
         res
-          .status(400)
-          .send({ message: 'Переданы некорректные данные' });
+          .status(500)
+          .send({ message: 'Ошибка сервера' });
       } else {
         res.status(400)
-          .send({ message: 'Ошибка сервера' });
+          .send({ message: 'Переданы некорректные данные' });
       }
     });
 };
@@ -62,7 +62,7 @@ module.exports.getCards = (req, res) => {
           .send(cards)),
     ).catch(() => res
       .status(400)
-      .send({ message: 'Ошибка сервера' }));
+      .send({ message: 'Переданы некорректные данные' }));
 };
 
 module.exports.createCard = (req, res) => {
@@ -77,13 +77,13 @@ module.exports.createCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'ValidError') {
-        res.status(400)
+        res.status(500)
           .send({
-            message: 'Переданы некорректные данные в методы создания',
+            message: 'Ошибка сервера',
           });
       } else {
         res.status(400)
-          .send({ message: 'Ошибка сервера' });
+          .send({ message: 'Переданы некорректные данные' });
       }
     });
 };
@@ -99,13 +99,13 @@ module.exports.deleteCard = (req, res) => {
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400)
+        res.status(500)
           .send({
-            message: 'Переданы некорректные данные',
+            message: 'Ошибка сервера',
           });
       } else {
         res.status(400)
-          .send({ message: 'Ошибка сервера' });
+          .send({ message: 'Переданы некорректные данные' });
       }
     });
 };
