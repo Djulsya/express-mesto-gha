@@ -25,14 +25,9 @@ module.exports.getUserId = (req, res) => {
         res.send(user);
       }
     })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        res.status(400)
-          .send({ message: 'Переданы некорректные данные' });
-      } else {
-        res.status(400)
-          .send({ message: 'Ошибка сервера' });
-      }
+    .catch(() => {
+      res.status(400)
+        .send({ message: 'Переданы некорректные данные' });
     });
 };
 
