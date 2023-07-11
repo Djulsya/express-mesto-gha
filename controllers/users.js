@@ -1,7 +1,16 @@
 const User = require('../models/user');
 
-module.exports.getUsers = (res, next) => {
-  User.find({}).then((users) => (res.status(200).send(users))).catch((err) => next(err));
+module.exports.getCards = (req, res) => {
+  User
+    .find({})
+    .then(
+      (users) => (
+        res
+          .status(200)
+          .send(users)),
+    ).catch(() => res
+      .status(500)
+      .send({ message: 'Ошибка сервера' }));
 };
 
 module.exports.getUserId = (req, res) => {
