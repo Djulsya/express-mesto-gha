@@ -29,8 +29,8 @@ module.exports.getUserId = (req, res) => {
     })
     .catch(() => {
       res
-        .status(500)
-        .send({ message: 'Ошибка сервера' });
+        .status(400)
+        .send({ message: 'Ошибка fhgkghj сервера' });
     });
 };
 
