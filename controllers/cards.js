@@ -91,8 +91,12 @@ module.exports.createCard = (req, res) => {
 module.exports.deleteCard = (req, res) => {
   const { cardId } = req.params;
   return Card
-    .findByIdAndDelete(cardId)
-    .then(() => res.status(200).send())
+    .findByIdAndDelete(
+      req.card._id,
+      { cardId },
+      { runValidators: true, new: true },
+    )
+    .then(() => res.send({ message: 'Фотография удалена' }))
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(400)
