@@ -23,7 +23,10 @@ app.use((req, res, next) => {
 //   console.log(req.user._id);
 // };
 
+app.use(express.json());
 app.use(usersRouter);
 app.use(cardsRouter);
 
-app.listen(PORT);
+app.listen(PORT, () => {
+  console.log(`Server listen on ${PORT}`);
+});
