@@ -18,20 +18,19 @@ module.exports.getUserId = (req, res) => {
   return User
     .findById(userId)
     .then((user) => {
-      if (!user) {
-        res
-          .send(user);
-      }
+      res
+        .status(201)
+        .send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res
-          .status(404)
-          .send({ message: 'Пользователь не найден' });
+          .status(400)
+          .send({ message: 'Переданы некорректные данные' });
       } else {
         res
           .status(500)
-          .send({ message: 'Ошибка fhgkghj сервера' });
+          .send({ message: 'Ошибка сервера' });
       }
     });
 };
