@@ -73,10 +73,10 @@ module.exports.createCard = (req, res) => {
   const owner = req.user._id;
   return Card
     .create({ name, link, owner })
-    .then((card) => {
+    .then((cards) => {
       res
         .status(201)
-        .send(card);
+        .send(cards);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -97,13 +97,13 @@ module.exports.deleteCard = (req, res) => {
   const { cardId } = req.params;
   return Card
     .findByIdAndDelete(cardId)
-    .then((card) => {
-      if (!card) {
+    .then((cards) => {
+      if (!cards) {
         res
           .status(404)
           .send({ message: 'Карточка не найдена' });
       } else {
-        res.send(card);
+        res.send(cards);
       }
     })
     .then(() => res.status(200).send({ message: 'Удалено' }))
