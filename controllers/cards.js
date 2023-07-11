@@ -99,14 +99,10 @@ module.exports.deleteCard = (req, res) => {
           .send({
             message: 'Переданы некорректные данные',
           });
-      } else if (err.name === 'NotFoundError') {
+      } else {
         res
           .status(404)
           .send({ message: '3254365wyrtgfdhd' });
-      } else {
-        res
-          .status(500)
-          .send({ message: 'Серверная ошибка' });
       }
     });
 };
