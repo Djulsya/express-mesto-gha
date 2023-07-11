@@ -19,14 +19,17 @@ module.exports.getUserId = (req, res) => {
     .findById(userId)
     .then((user) => {
       if (!user) {
-        res.status(404)
+        res
+          .status(404)
           .send({ message: 'Пользователь не найден' });
       } else {
-        res.send(user);
+        res
+          .send(user);
       }
     })
     .catch(() => {
-      res.status(400)
+      res
+        .status(400)
         .send({ message: 'Переданы некорректные данные' });
     });
 };
@@ -37,15 +40,18 @@ module.exports.createUser = (req, res) => {
     .create(
       { name, about, avatar },
     ).then((user) => {
-      res.status(201)
+      res
+        .status(201)
         .send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidError') {
-        res.status(500)
+        res
+          .status(500)
           .send({ message: 'Ошибка сервера' });
       } else {
-        res.status(400)
+        res
+          .status(400)
           .send({ message: 'Переданы некорректные данные' });
       }
     });
@@ -59,19 +65,20 @@ module.exports.updateUserAbout = (req, res) => {
       { name, about },
       { runValidators: true, new: true },
     ).then((user) => {
-      res.send(user);
+      res
+        .send(user);
     }).catch((err) => {
       if (err.message === 'NotFound') {
         res
           .status(404)
           .send({ message: 'Пользователь не найден' });
-        return;
-      }
-      if (err.name === 'ValidError') {
-        res.status(500)
+      } else if (err.name === 'ValidError') {
+        res
+          .status(500)
           .send({ message: 'Ошибка сервера' });
       } else {
-        res.status(400)
+        res
+          .status(400)
           .send({ message: 'Переданы некорректные данные' });
       }
     });
@@ -79,16 +86,16 @@ module.exports.updateUserAbout = (req, res) => {
 
 module.exports.updateUserAvatar = (req, res) => {
   const { avatar } = req.body;
-  User
+  return User
     .findByIdAndUpdate(
       req.user._id,
       { avatar },
       { runValidators: true, new: true },
     ).then((user) => {
       if (!user) {
-        res.status(404)
+        res
+          .status(404)
           .send({ message: 'Пользователь не найден' });
-        return;
       }
       res
         .send(user);
