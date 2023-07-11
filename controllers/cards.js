@@ -92,9 +92,6 @@ module.exports.deleteCard = (req, res) => {
   const { cardId } = req.params;
   return Card
     .findByIdAndDelete(cardId)
-    .orFail(() => {
-      throw new Error('NotFoundError');
-    })
     .then(() => res.send({ message: 'Карточка удалена' }))
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -102,14 +99,14 @@ module.exports.deleteCard = (req, res) => {
           .send({
             message: 'Переданы некорректные данные',
           });
-      }
-      if (err.name === 'NotFoundError') {
+      } else if (err.name === 'NotFoundError') {
         res
           .status(404)
           .send({ message: '3254365wyrtgfdhd' });
+      } else {
+        res
+          .status(500)
+          .send({ message: 'Серверная ошибка' });
       }
-      res
-        .status(500)
-        .send({ message: 'Серверная ошибка' });
     });
 };
