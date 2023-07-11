@@ -7,24 +7,18 @@ module.exports.addLike = (req, res) => {
       { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
       { new: true },
     ).orFail(() => new Error('NotFoundError'))
-    .then((card) => {
-      if (!card) {
-        res
-          .status(404)
-          .send({ message: 'Карточка не найдена' });
-      } else {
-        res
-          .send(card);
-      }
-    }).catch((err) => {
+    .then((err) => {
       if (err.message === 'NotFoundError') {
         res
           .status(404)
           .send({ message: 'Карточка не найдена' });
       } else {
-        res.status(500)
+        res
           .send({ message: 'Ошибка сервера' });
       }
+    }).catch(() => {
+      res.status(500)
+        .send({ message: 'Ошибка сервера' });
     });
 };
 
