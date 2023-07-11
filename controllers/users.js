@@ -92,7 +92,8 @@ module.exports.updateUserAvatar = (req, res) => {
       req.user._id,
       { avatar },
       { runValidators: true, new: true },
-    ).then((users) => {
+    ).orFail(() => new Error('NotFoundError'))
+    .then((users) => {
       if (!users) {
         res
           .status(404)
@@ -100,5 +101,19 @@ module.exports.updateUserAvatar = (req, res) => {
       }
       res
         .send(users);
+    }).catch((err) => {
+      if (err.name === 'ValidationError') {
+        res
+          .status(400)
+          .send({ message: 'Переданы некорректные данные' });
+      } else if (err.message === 'NotFoundError') {
+        res
+          .status(404)
+          .send({ message: 'Пользователь не найден' });
+      } else {
+        res
+          .status(500)
+          .send({ message: 'Ошибка сервера' });
+      }
     });
 };
