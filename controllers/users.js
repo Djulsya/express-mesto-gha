@@ -15,16 +15,23 @@ module.exports.getUsers = (req, res) => {
 
 module.exports.getUserId = (req, res) => {
   const { userId } = req.params;
-  return User.findById(userId)
-    .orFail(() => new Error('NotFound'))
-    .then((user) => res.status(200).send(user))
+  return User
+    .findById(userId)
+    .then((user) => {
+      if (!user) {
+        res.status(404)
+          .send({ message: 'Пользователь не найден' });
+      } else {
+        res.send(user);
+      }
+    })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Переданы некорректные данные' });
-      } else if (err.message === 'NotFound') {
-        res.status(404).send({ message: 'Пользователь не найден' });
+        res.status(400)
+          .send({ message: 'Переданы некорректные данные' });
       } else {
-        res.status(500).send({ message: 'Ошибка сервера' });
+        res.status(500)
+          .send({ message: 'Ошибка сервера' });
       }
     });
 };

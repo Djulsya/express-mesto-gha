@@ -15,7 +15,6 @@ app.use((req, res, next) => {
   req.user = {
     _id: '5d8b8592978f8bd833ca8133',
   };
-
   next();
 });
 
@@ -27,7 +26,4 @@ app.use(express.json());
 app.use(usersRouter);
 app.use(cardsRouter);
 
-app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log(`Server listen on ${PORT}`);
-});
+app.listen(PORT);
