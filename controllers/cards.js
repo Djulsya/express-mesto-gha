@@ -8,7 +8,7 @@ module.exports.addLike = (req, res) => {
       { new: true },
     ).orFail(() => new Error('NotFoundError'))
     .then((err) => {
-      if (err.message === 'NotFoundError') {
+      if (!err.message === 'NotFoundError') {
         res
           .status(404)
           .send({ message: 'Карточка не найдена' });
