@@ -18,7 +18,7 @@ module.exports.addLike = (req, res) => {
       if (err.message === 'NotFoundError') {
         res
           .status(404)
-          .send({ message: 'Переданы некорректные данные' });
+          .send({ message: 'Карточка не найдена' });
       } else {
         res.status(400)
           .send({ message: 'Переданы некорректные данные' });
@@ -96,14 +96,14 @@ module.exports.deleteCard = (req, res) => {
       res
         .status(404)
         .send({
-          message: '12345647589',
+          message: 'Карточка не найдена',
         });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(400)
           .send({
-            message: 'ФАПЫАПЛЬКЕВОТОРЛБЛОРПАЫПВРТМЬ',
+            message: 'Переданы некорректные данные',
           });
       }
     });
