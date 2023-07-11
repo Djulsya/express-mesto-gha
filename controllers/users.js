@@ -64,13 +64,14 @@ module.exports.updateUserAbout = (req, res) => {
       { name, about },
       { runValidators: true, new: true },
     ).then((user) => {
-      if (!user) {
-        res.status(404)
-          .send({ message: 'Пользователь не найден' });
-      } else {
-        res.send(user);
-      }
+      res.send(user);
     }).catch((err) => {
+      if (err.message === 'NotFound') {
+        res
+          .status(404)
+          .send({ message: 'Пользователь не найден' });
+        return;
+      }
       if (err.name === 'ValidError') {
         res.status(400)
           .send({ message: 'Переданы некорректные данные' });
