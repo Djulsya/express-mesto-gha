@@ -18,7 +18,7 @@ module.exports.addLike = (req, res) => {
       if (err.name === 'CastError') {
         res.status(400).send({ message: '123' });
       }
-      res.status(500).send({ message: '876543' });
+      res.status(500).send({ message: 'Ошибка сервера' });
     });
 };
 
@@ -34,21 +34,19 @@ module.exports.deleteLike = (req, res) => {
         res
           .status(404)
           .send({ message: 'Карточка не найдена' });
-      } else {
-        res
-          .send(card);
       }
+      res
+        .send(card);
     })
     .catch((err) => {
       if (err.name === 'NotFoundError') {
         res
           .status(400)
           .send({ message: 'Переданы некорректные данные' });
-      } else {
-        res
-          .status(500)
-          .send({ message: 'Ошибка сервера' });
       }
+      res
+        .status(500)
+        .send({ message: 'Ошибка сервера' });
     });
 };
 
