@@ -27,10 +27,14 @@ module.exports.getUserId = (req, res) => {
           .send(users);
       }
     })
-    .catch(() => {
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res
+          .status(400)
+          .send({ message: 'Переданы некорректные данные' });
+      }
       res
-        .status(400)
-        .send({ message: 'Переданы некорректные данные' });
+        .status(500).send({ message: 'Ошибка сервера' });
     });
 };
 
