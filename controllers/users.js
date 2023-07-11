@@ -20,12 +20,17 @@ module.exports.getUserId = (req, res) => {
     .then((user) => {
       if (!user) {
         res
-          .status(400)
+          .status(404)
           .send({ message: 'Пользователь не найден' });
       } else {
         res
           .send(user);
       }
+    })
+    .catch(() => {
+      res
+        .status(400)
+        .send({ message: 'Переданы некорректные данные' });
     });
 };
 
