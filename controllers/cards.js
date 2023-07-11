@@ -92,6 +92,9 @@ module.exports.deleteCard = (req, res) => {
   const { cardId } = req.params;
   return Card
     .findByIdAndDelete(cardId)
+    .orFail(() => {
+      throw new Error('NotFoundError');
+    })
     .then(() => res.send({ message: 'Карточка удалена' }))
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -100,7 +103,6 @@ module.exports.deleteCard = (req, res) => {
             message: 'Переданы некорректные данные',
           });
       }
-
       if (err.name === 'NotFoundError') {
         res
           .status(404)
