@@ -1,24 +1,24 @@
 const Card = require('../models/card');
 
 module.exports.addLike = (req, res) => {
-  Card
-    .findByIdAndUpdate(
-      req.params.cardId,
-      { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
-      { new: true },
-    ).orFail(() => new Error('NotFoundError'))
-    .then((err) => {
-      if (!err.message === 'NotFoundError') {
-        res
-          .status(404)
-          .send({ message: 'Карточка не найдена' });
-      } else {
-        res
-          .send({ message: 'Ошибка сервера' });
+  const { cardId } = req.params;
+
+  return Card.findByIdAndUpdate(
+    cardId,
+    { $addToSet: { likes: req.user._id } },
+    { new: true },
+  )
+    .then((updatedCard) => {
+      if (!updatedCard) {
+        res.status(404).send({ message: '777777' });
       }
-    }).catch(() => {
-      res.status(500)
-        .send({ message: 'Ошибка сервера' });
+      res.send(updatedCard);
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        res.status(400).send({ message: '123' });
+      }
+      res.status(500).send({ message: '876543' });
     });
 };
 
