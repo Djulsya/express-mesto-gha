@@ -103,15 +103,10 @@ module.exports.deleteCard = (req, res) => {
           .send({
             message: 'ФАПЫАПЛЬКЕВОТОРЛБЛОРПАЫПВРТМЬ',
           });
-      }
-      if (err.name === 'NotFoundError') {
+      } else {
         res
           .status(400)
           .send({ message: 'Переданы некорректные данные' });
-      } else {
-        res
-          .status(500)
-          .send({ message: 'Ошибка сервера' });
       }
     });
 };
