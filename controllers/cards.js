@@ -92,7 +92,7 @@ module.exports.deleteCard = (req, res) => {
   const { cardId } = req.params;
   return Card
     .findByIdAndDelete(cardId)
-    .then((card) => res.status(200).send(card))
+    .then(() => res.status(200).send())
     .catch((err) => {
       if (err.name === 'CastError') {
         res.status(400)
