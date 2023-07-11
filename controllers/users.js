@@ -17,14 +17,14 @@ module.exports.getUserId = (req, res) => {
   const { userId } = req.params;
   return User
     .findById(userId)
-    .then((user) => {
-      if (!user) {
+    .then((users) => {
+      if (!users) {
         res
           .status(404)
           .send({ message: 'Пользователь не найден' });
       } else {
         res
-          .send(user);
+          .send(users);
       }
     })
     .catch(() => {
@@ -39,10 +39,10 @@ module.exports.createUser = (req, res) => {
   return User
     .create(
       { name, about, avatar },
-    ).then((user) => {
+    ).then((users) => {
       res
         .status(201)
-        .send(user);
+        .send(users);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -65,9 +65,9 @@ module.exports.updateUserAbout = (req, res) => {
       { name, about },
       { runValidators: true, new: true },
     ).orFail(() => new Error('NotFoundError'))
-    .then((user) => {
+    .then((users) => {
       res
-        .send(user);
+        .send(users);
     }).catch((err) => {
       if (err.message === 'NotFoundError') {
         res
@@ -92,13 +92,13 @@ module.exports.updateUserAvatar = (req, res) => {
       req.user._id,
       { avatar },
       { runValidators: true, new: true },
-    ).then((user) => {
-      if (!user) {
+    ).then((users) => {
+      if (!users) {
         res
           .status(404)
           .send({ message: 'Пользователь не найден' });
       }
       res
-        .send(user);
+        .send(users);
     });
 };
