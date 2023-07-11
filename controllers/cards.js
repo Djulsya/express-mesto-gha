@@ -92,14 +92,12 @@ module.exports.deleteCard = (req, res) => {
   const { cardId } = req.params;
   return Card
     .findByIdAndDelete(cardId)
-    .then((delCard) => {
-      if (!delCard) {
-        res
-          .status(404)
-          .send({
-            message: '12345647589',
-          });
-      }
+    .then(() => {
+      res
+        .status(404)
+        .send({
+          message: '12345647589',
+        });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
