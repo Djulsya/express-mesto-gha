@@ -93,10 +93,9 @@ module.exports.deleteCard = (req, res) => {
   return Card
     .findByIdAndDelete(cardId)
     .then((card) => {
-      if (!card) {
-        res.status(404)
-          .send({ message: 'Переданы некорректные данные' });
-      }
+      res
+        .status(200)
+        .send(card);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
