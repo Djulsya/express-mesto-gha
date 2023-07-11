@@ -26,9 +26,4 @@ app.use(express.json());
 app.use(usersRouter);
 app.use(cardsRouter);
 
-app.use((res) => {
-  res.status(404)
-    .send({ message: 'Данные не найдены' });
-});
-
 app.listen(PORT);
