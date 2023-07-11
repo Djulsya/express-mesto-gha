@@ -15,24 +15,24 @@ module.exports.getUsers = (req, res) => {
 
 module.exports.getUserId = (req, res) => {
   const { userId } = req.params;
-  return User
+  User
     .findById(userId)
+    // eslint-disable-next-line consistent-return
     .then((user) => {
       if (!user) {
-        res.status(404)
+        return res.status(404)
           .send({ message: 'Пользователь не найден' });
-      } else {
-        res.send(user);
       }
+      res.send(user);
     })
+    // eslint-disable-next-line consistent-return
     .catch((err) => {
       if (err.name === 'CastError') {
-        res.status(400)
+        return res.status(400)
           .send({ message: 'Переданы некорректные данные' });
-      } else {
-        res.status(500)
-          .send({ message: 'Ошибка сервера' });
       }
+      res.status(500)
+        .send({ message: 'Ошибка сервера' });
     });
 };
 
