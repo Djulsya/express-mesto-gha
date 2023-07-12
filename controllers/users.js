@@ -1,3 +1,7 @@
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable import/no-unresolved */
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
 module.exports.getUsers = (req, res) => {
@@ -42,16 +46,20 @@ module.exports.createUser = (req, res) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
-  return User
-    .create(
-      {
-        name, about, avatar, email, password,
-      },
-    ).then((users) => {
-      res
-        .status(201)
-        .send(users);
-    })
+  bcrypt
+    .hash(password, 10)
+    .then((hash) => User
+      .create(
+        {
+          name, about, avatar, email, password: hash,
+        },
+      ).then((users) => {
+        res
+          .status(201)
+          .send({
+            name: users.name, about: users.about, avatar: users.avatar, email: users.email,
+          });
+      }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         res
@@ -124,4 +132,17 @@ module.exports.updateUserAvatar = (req, res) => {
           .send({ message: 'Ошибка сервера' });
       }
     });
+};
+
+module.exports.login = (req, res, next) => {
+  const { email, password } = req.body;
+  return User
+    .findUser(email, password)
+    .then((users) => {
+      const token = jwt
+        .sign({ _id: users._id }, 'some-secret-key', { expiresIn: '7d' });
+      res
+        .send({ token });
+    })
+    .catch(next);
 };
