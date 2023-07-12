@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cardsRouter = require('./routes/cards');
 const usersRouter = require('./routes/users');
+// eslint-disable-next-line import/order
+const helmet = require('helmet');
 
 const { PORT = 3000 } = process.env;
 
@@ -21,6 +23,7 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(usersRouter);
 app.use(cardsRouter);
+app.use(helmet());
 
 app.use((req, res) => {
   res.status(404)

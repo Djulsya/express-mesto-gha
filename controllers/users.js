@@ -39,10 +39,14 @@ module.exports.getUserId = (req, res) => {
 };
 
 module.exports.createUser = (req, res) => {
-  const { name, about, avatar } = req.body;
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
   return User
     .create(
-      { name, about, avatar },
+      {
+        name, about, avatar, email, password,
+      },
     ).then((users) => {
       res
         .status(201)
