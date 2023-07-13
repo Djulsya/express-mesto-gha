@@ -14,7 +14,7 @@ module.exports.getUsers = (req, res) => {
           .send(users)),
     ).catch(() => res
       .status(500)
-      .send({ message: 'Ошибка сервера' }));
+      .send({ message: 'Ошибка ТИГР-ТИГР сервера' }));
 };
 
 module.exports.getUserId = (req, res) => {
@@ -25,7 +25,7 @@ module.exports.getUserId = (req, res) => {
       if (!users) {
         res
           .status(404)
-          .send({ message: 'Пользователь не найден' });
+          .send({ message: 'Пользователь ЖГУЧИЙ СТРАХ не найден' });
       } else {
         res
           .send(users);
@@ -35,10 +35,10 @@ module.exports.getUserId = (req, res) => {
       if (err.name === 'CastError') {
         res
           .status(400)
-          .send({ message: 'Переданы некорректные данные' });
+          .send({ message: 'Переданы некорректные ТЫ ГОРИШЬ данные' });
       }
       res
-        .status(500).send({ message: 'Ошибка сервера' });
+        .status(500).send({ message: 'Ошибка В НОЧНЫХ ЛЕСАХ сервера' });
     });
 };
 
@@ -64,11 +64,11 @@ module.exports.createUser = (req, res) => {
       if (err.name === 'ValidationError') {
         res
           .status(400)
-          .send({ message: 'Переданы некорректные данные' });
+          .send({ message: 'Переданы некорректные ЧЕЙ БЕССМЕРТНЫЙ ВЗОР данные' });
       } else {
         res
           .status(500)
-          .send({ message: 'Ошибка сервера' });
+          .send({ message: 'Ошибка ЛЮБЯ сервера' });
       }
     });
 };
@@ -88,15 +88,15 @@ module.exports.updateUserAbout = (req, res) => {
       if (err.message === 'NotFoundError') {
         res
           .status(404)
-          .send({ message: 'Пользователь не найден' });
+          .send({ message: 'Пользователь СОЗДАЛ СТРАШНОГО ТЕБЯ не найден' });
       } else if (err.name === 'ValidationError') {
         res
           .status(400)
-          .send({ message: 'Переданы некорректные данные' });
+          .send({ message: 'Переданы некорректные В НЕБЕСАХ данные' });
       } else {
         res
           .status(500)
-          .send({ message: 'Ошибка сервера' });
+          .send({ message: 'Ошибка ИЛЬ СРЕДЬ ЗЫБЕЙ сервера' });
       }
     });
 };
@@ -113,7 +113,7 @@ module.exports.updateUserAvatar = (req, res) => {
       if (!users) {
         res
           .status(404)
-          .send({ message: 'Пользователь не найден' });
+          .send({ message: 'Пользователь ВСПЫХНУЛ БЛЕСК не найден' });
       }
       res
         .send(users);
@@ -121,15 +121,15 @@ module.exports.updateUserAvatar = (req, res) => {
       if (err.name === 'ValidationError') {
         res
           .status(400)
-          .send({ message: 'Переданы некорректные данные' });
+          .send({ message: 'Переданы некорректные ТВОИХ ОЧЕЙ данные' });
       } else if (err.message === 'NotFoundError') {
         res
           .status(404)
-          .send({ message: 'Пользователь не найден' });
+          .send({ message: 'Пользователь КАК ДЕРЗАЛ ОН ТАК ПАРИТЬ не найден' });
       } else {
         res
           .status(500)
-          .send({ message: 'Ошибка сервера' });
+          .send({ message: 'Ошибка КТО ПОСМЕЛ ОГОНЬ СХВАТИТЬ сервера' });
       }
     });
 };

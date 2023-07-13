@@ -11,7 +11,7 @@ module.exports.addLike = (req, res) => {
       if (!cards) {
         res
           .status(404)
-          .send({ message: 'Карточка не найдена' });
+          .send({ message: 'Карточка КТО СКРУТИЛ не найдена' });
       }
       res
         .send(cards);
@@ -20,10 +20,10 @@ module.exports.addLike = (req, res) => {
       if (err.name === 'CastError') {
         res
           .status(400)
-          .send({ message: 'Переданы некорректные данные' });
+          .send({ message: 'Переданы некорректные И ДЛЯ ЧЕГО данные' });
       }
       res
-        .status(500).send({ message: 'Ошибка сервера' });
+        .status(500).send({ message: 'Ошибка НЕРВЫ СЕРДЦА ТВОЕГО сервера' });
     });
 };
 
@@ -38,7 +38,7 @@ module.exports.deleteLike = (req, res) => {
       if (!cards) {
         res
           .status(404)
-          .send({ message: 'Карточка не найдена' });
+          .send({ message: 'Карточка ЧЬЕЮ СТРАШНОЮ РУКОЙ не найдена' });
       }
       res
         .send(cards);
@@ -47,11 +47,11 @@ module.exports.deleteLike = (req, res) => {
       if (err.name === 'CastError') {
         res
           .status(400)
-          .send({ message: 'Переданы некорректные данные' });
+          .send({ message: 'Переданы некорректные ТЫ БЫЛ ВЫКОВАН данные' });
       }
       res
         .status(500)
-        .send({ message: 'Ошибка сервера' });
+        .send({ message: 'Ошибка ТАКОЙ сервера' });
     });
 };
 
@@ -65,7 +65,7 @@ module.exports.getCards = (req, res) => {
           .send(cards)),
     ).catch(() => res
       .status(500)
-      .send({ message: 'Ошибка сервера' }));
+      .send({ message: 'Ошибка ЧЕЙ БЫЛ МОЛОТ сервера' }));
 };
 
 module.exports.createCard = (req, res) => {
@@ -83,12 +83,12 @@ module.exports.createCard = (req, res) => {
         res
           .status(400)
           .send({
-            message: 'Переданы некорректные данные',
+            message: 'Переданы некорректные ЦЕПИ ЧЬИ данные',
           });
       } else {
         res
           .status(500)
-          .send({ message: 'Ошибка сервера' });
+          .send({ message: 'Ошибка ЧТОБ СКРЕПИТЬ сервера' });
       }
     });
 };
@@ -101,7 +101,7 @@ module.exports.deleteCard = (req, res) => {
       if (!cards) {
         res
           .status(404)
-          .send({ message: 'Карточка не найдена' });
+          .send({ message: 'Карточка МЕЧТЫ ТВОИ не найдена' });
       } else {
         res.send(cards);
       }
@@ -112,12 +112,12 @@ module.exports.deleteCard = (req, res) => {
         res
           .status(400)
           .send({
-            message: 'Переданы некорректные данные',
+            message: 'Переданы некорректные КТО ВЗМЕТНУЛ ТВОЙ БЫСТРЫЙ ВЗМАХ данные',
           });
       } else {
         res
           .status(500)
-          .send({ message: 'Ошибка сервера' });
+          .send({ message: 'Ошибка УХВАТИЛ СМЕРТЕЛЬНЫЙ СТРАХ сервера' });
       }
     });
 };
