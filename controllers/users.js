@@ -1,11 +1,11 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable import/no-unresolved */
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const Unauthorized = require('../errors/Unauthorized');
-const BadRequest = require('../errors/BadRequest');
-const EvilMail = require('../errors/EvilMail');
+// const Unauthorized = require('../errors/Unauthorized');
+// const BadRequest = require('../errors/BadRequest');
+// const EvilMail = require('../errors/EvilMail');
 
 module.exports.getUsers = (req, res) => {
   User
@@ -134,52 +134,5 @@ module.exports.updateUserAvatar = (req, res) => {
           .status(500)
           .send({ message: 'Ошибка КТО ПОСМЕЛ ОГОНЬ СХВАТИТЬ сервера' });
       }
-    });
-};
-
-module.exports.login = (req, res, next) => {
-  const { email, password } = req.body;
-  return User
-    .findOne({ email })
-    .select('+password')
-    .then((users) => {
-      if (users) {
-        bcrypt
-          .compare(password, users.password)
-          .then((matched) => {
-            if (matched) {
-              const token = jwt
-                .sign({ _id: users._id }, 'some-secret-key', { expiresIn: '7d' });
-              res
-                .send({ token, message: 'Вы успешно авторизовались' });
-            }
-            next(new Unauthorized(''));
-          })
-          .catch((err) => {
-            if (err.message.includes('Validation')) {
-              next(new BadRequest(''));
-            }
-            if (err.name === 'CastError') {
-              next(new BadRequest(''));
-            }
-            if (err.message.includes('E11000')) {
-              next(new EvilMail());
-            }
-            next(err);
-          });
-      }
-      next(new Unauthorized(''));
-    })
-    .catch((err) => {
-      if (err.message.includes('Validation')) {
-        next(new BadRequest(''));
-      }
-      if (err.name === 'CastError') {
-        next(new BadRequest(''));
-      }
-      if (err.message.includes('E11000')) {
-        next(new EvilMail());
-      }
-      next(err);
     });
 };
