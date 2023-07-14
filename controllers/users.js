@@ -3,13 +3,9 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-
-class autharizationError extends Error {
-  constructor(message) {
-    super(message);
-    this.statusCode = 401;
-  }
-}
+const Unauthorized = require('../errors/Unauthorized');
+const BadRequest = require('../errors/BadRequest');
+const EvilMail = require('../errors/EvilMail');
 
 module.exports.getUsers = (req, res) => {
   User
@@ -157,9 +153,33 @@ module.exports.login = (req, res, next) => {
               res
                 .send({ token, message: 'Вы успешно авторизовались' });
             }
+            next(new Unauthorized(''));
           })
-          .catch((err) => autharizationError(err, next));
+          .catch((err) => {
+            if (err.message.includes('Validation')) {
+              next(new BadRequest(''));
+            }
+            if (err.name === 'CastError') {
+              next(new BadRequest(''));
+            }
+            if (err.message.includes('E11000')) {
+              next(new EvilMail());
+            }
+            next(err);
+          });
       }
+      next(new Unauthorized(''));
     })
-    .catch((err) => autharizationError(err, next));
+    .catch((err) => {
+      if (err.message.includes('Validation')) {
+        next(new BadRequest(''));
+      }
+      if (err.name === 'CastError') {
+        next(new BadRequest(''));
+      }
+      if (err.message.includes('E11000')) {
+        next(new EvilMail());
+      }
+      next(err);
+    });
 };
