@@ -4,6 +4,13 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
+class autharizationError extends Error {
+  constructor(message) {
+    super(message);
+    this.statusCode = 401;
+  }
+}
+
 module.exports.getUsers = (req, res) => {
   User
     .find({})
@@ -137,19 +144,22 @@ module.exports.updateUserAvatar = (req, res) => {
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   return User
-    .findOne({ email }).select('+password')
+    .findOne({ email })
+    .select('+password')
     .then((users) => {
       if (users) {
-        bcrypt.compare(password, users.password)
+        bcrypt
+          .compare(password, users.password)
           .then((matched) => {
             if (matched) {
               const token = jwt
                 .sign({ _id: users._id }, 'some-secret-key', { expiresIn: '7d' });
               res
-                .send({ token });
+                .send({ token, message: 'Вы успешно авторизовались' });
             }
-          });
+          })
+          .catch((err) => autharizationError(err, next));
       }
     })
-    .catch(next);
+    .catch((err) => autharizationError(err, next));
 };
