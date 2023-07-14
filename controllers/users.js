@@ -137,8 +137,9 @@ module.exports.updateUserAvatar = (req, res) => {
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   return User
-    .findUser(email, password)
+    .findOne({ email }).select('+password')
     .then((users) => {
+      bcrypt.compare(password, users.password)
       const token = jwt
         .sign({ _id: users._id }, 'some-secret-key', { expiresIn: '7d' });
       res
