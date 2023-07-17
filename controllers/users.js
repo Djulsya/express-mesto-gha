@@ -21,28 +21,22 @@ module.exports.getUsers = (req, res) => {
       .send({ message: 'Ошибка ТИГР-ТИГР сервера' }));
 };
 
-module.exports.getUserId = (req, res) => {
+module.exports.getUserById = (req, res, next) => {
   const { userId } = req.params;
-  return User
+  User
     .findById(userId)
-    .then((users) => {
-      if (!users) {
-        res
-          .status(404)
-          .send({ message: 'Пользователь ЖГУЧИЙ СТРАХ не найден' });
-      } else {
-        res
-          .send(users);
+    .then((user) => {
+      if (!user) {
+        throw new NotFound('Пользователь sadhj не найден');
       }
+      res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        res
-          .status(400)
-          .send({ message: 'Переданы некорректные ТЫ ГОРИШЬ данные' });
+        next(new BadRequest('Переданы некорректные 456 данные'));
+        return;
       }
-      res
-        .status(500).send({ message: 'Ошибка В НОЧНЫХ ЛЕСАХ сервера' });
+      next(err);
     });
 };
 
@@ -76,64 +70,39 @@ module.exports.createUser = (req, res, next) => {
     .catch(next);
 };
 
-module.exports.updateUserAbout = (req, res) => {
+module.exports.updateUserAbout = (req, res, next) => {
   const { name, about } = req.body;
-  return User
+  User
     .findByIdAndUpdate(
       req.user._id,
       { name, about },
-      { runValidators: true, new: true },
-    ).orFail(() => new Error('NotFoundError'))
-    .then((users) => {
-      res
-        .send(users);
-    }).catch((err) => {
-      if (err.message === 'NotFoundError') {
-        res
-          .status(404)
-          .send({ message: 'Пользователь СОЗДАЛ СТРАШНОГО ТЕБЯ не найден' });
-      } else if (err.name === 'ValidationError') {
-        res
-          .status(400)
-          .send({ message: 'Переданы некорректные В НЕБЕСАХ данные' });
-      } else {
-        res
-          .status(500)
-          .send({ message: 'Ошибка ИЛЬ СРЕДЬ ЗЫБЕЙ сервера' });
+      { new: true, runValidators: true },
+    )
+    .then((user) => {
+      if (!user) {
+        throw new NotFound('Пользователь 6666666667 не найден');
       }
+      res.status(200).send(user);
+    })
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(BadRequest('Переданы некорректные 789 данные.'));
+      } else next(err);
     });
 };
-
-module.exports.updateUserAvatar = (req, res) => {
+module.exports.updateUserAvatar = (req, res, next) => {
   const { avatar } = req.body;
-  return User
+  User
     .findByIdAndUpdate(
       req.user._id,
       { avatar },
-      { runValidators: true, new: true },
-    ).orFail(() => new Error('NotFoundError'))
-    .then((users) => {
-      if (!users) {
-        res
-          .status(404)
-          .send({ message: 'Пользователь ВСПЫХНУЛ БЛЕСК не найден' });
-      }
-      res
-        .send(users);
-    }).catch((err) => {
-      if (err.name === 'ValidationError') {
-        res
-          .status(400)
-          .send({ message: 'Переданы некорректные ТВОИХ ОЧЕЙ данные' });
-      } else if (err.message === 'NotFoundError') {
-        res
-          .status(404)
-          .send({ message: 'Пользователь КАК ДЕРЗАЛ ОН ТАК ПАРИТЬ не найден' });
-      } else {
-        res
-          .status(500)
-          .send({ message: 'Ошибка КТО ПОСМЕЛ ОГОНЬ СХВАТИТЬ сервера' });
-      }
+      { new: true, runValidators: true },
+    )
+    .then((user) => res.status(200).send(user))
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new BadRequest('Переданы некорректные ZXCVBNM<MNBVCXCVBNMMJHGFD данные.'));
+      } else next(err);
     });
 };
 
@@ -152,19 +121,18 @@ module.exports.login = (req, res, next) => {
 };
 
 module.exports.updateUser = (req, res, next) => {
-  User
-    .indByIdAndUpdate(req.user._id)
-    .orFail(() => {
-      throw new NotFound('Пользователь 33333333333333 не найден');
+  User.findById(req.user._id)
+    .then((user) => {
+      if (!user) {
+        throw new NotFound('Пользователь не раздватри найден');
+      }
+      res.status(200).send(user);
     })
-    .then((users) => res
-      .status(200)
-      .send({ users }))
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new BadRequest('Переданы некорректные 8888888888888888 данные'));
-      } else {
-        next(err);
-      }
+        next(BadRequest('Переданы некорректные ПИУ ПИУ данные'));
+      } else if (err.message === 'NotFound') {
+        next(new NotFound('Пользователь GBE GBE не найден'));
+      } else next(err);
     });
 };
