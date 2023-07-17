@@ -28,7 +28,7 @@ app.use(helmet());
 app.post('/signin', login);
 app.post('/signup', createUser);
 
-app.use((req, res) => {
+app.use('*', (req, res) => {
   res.status(404)
     .send({ message: 'Данные 77777 не найдены' });
 });
