@@ -1,10 +1,15 @@
+/* eslint-disable import/no-extraneous-dependencies */
 const express = require('express');
 const mongoose = require('mongoose');
+const { errors } = require('celebrate');
+const router = require('express').Router();
 const cardsRouter = require('./routes/cards');
 const usersRouter = require('./routes/users');
 // eslint-disable-next-line import/order
 const helmet = require('helmet');
 const { createUser, login } = require('./controllers/users');
+const auth = require('./middlewares/auth');
+const NotFound = require('./errors/NotFound');
 
 const { PORT = 3000 } = process.env;
 
@@ -31,10 +36,25 @@ app.use(cardsRouter);
 app.use(helmet());
 app.post('/signin', login);
 app.post('/signup', createUser, validateCreateUser);
+app.use(auth);
+app.use(router);
 
-app.use((req, res) => {
-  res.status(404)
-    .send({ message: 'Данные 77777 не найдены' });
+router.use((req, res, next) => {
+  next(new NotFound('Страница не найдена'));
+});
+router.use(express.json());
+
+app.use(errors());
+app.use((err, req, res, next) => {
+  const { statusCode = 500, message } = err;
+  res
+    .status(statusCode)
+    .send({
+      message: statusCode === 500
+        ? 'Ошибка сервера'
+        : message,
+    });
+  next();
 });
 
 app.listen(PORT);
