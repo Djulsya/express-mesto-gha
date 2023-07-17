@@ -1,6 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-const { celebrate } = require('celebrate');
-const Joi = require('joi');
+const { celebrate, Joi } = require('celebrate');
 
 // const validateURL = /(https?:\/\/(www\.)?)[-._~:/?#@!&'()*+,;=]*#*/m;
 
