@@ -38,6 +38,7 @@ app.post('/signin', login, joiValidateLogin);
 app.post('/signup', createUser, joiValidateCreateUser);
 app.use(auth);
 app.use(router);
+app.use(errors());
 
 router.use((req, res, next) => {
   next(new NotFound('Страница не найдена'));
@@ -55,7 +56,5 @@ app.use((err, req, res, next) => {
     });
   next();
 });
-
-app.use(errors());
 
 app.listen(PORT);
