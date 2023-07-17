@@ -21,7 +21,7 @@ module.exports.getUsers = (req, res) => {
       .send({ message: 'Ошибка ТИГР-ТИГР сервера' }));
 };
 
-module.exports.getUserById = (req, res, next) => {
+module.exports.getUserId = (req, res, next) => {
   const { userId } = req.params;
   User
     .findById(userId)
