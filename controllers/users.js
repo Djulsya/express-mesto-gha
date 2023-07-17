@@ -14,7 +14,7 @@ module.exports.getUsers = (req, res) => {
     .then(
       (users) => (
         res
-          .status(200)
+          .status(401)
           .send(users)),
     ).catch(() => res
       .status(500)
