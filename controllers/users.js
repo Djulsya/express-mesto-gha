@@ -3,9 +3,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const Unauthorized = require('../errors/Unauthorized');
+const NotFound = require('../errors/NotFound');
 const BadRequest = require('../errors/BadRequest');
-const EvilMail = require('../errors/EvilMail');
 
 module.exports.getUsers = (req, res) => {
   User
@@ -140,46 +139,31 @@ module.exports.updateUserAvatar = (req, res) => {
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   return User
-    .findOne({ email })
+    .findOne({ email, password })
     .select('+password')
     .then((users) => {
-      if (users) {
-        bcrypt
-          .compare(password, users.password)
-          .then((matched) => {
-            if (matched) {
-              const token = jwt
-                .sign({ _id: users._id }, 'some-secret-key', { expiresIn: '7d' });
-              res
-                .send({ token, message: 'Вы успешно авторизовались' });
-            }
-            next(new Unauthorized(''));
-          })
-          .catch((err) => {
-            if (err.message.includes('Validation')) {
-              next(new BadRequest(''));
-            }
-            if (err.name === 'CastError') {
-              next(new BadRequest(''));
-            }
-            if (err.message.includes('E11000')) {
-              next(new EvilMail());
-            }
-            next(err);
-          });
-      }
-      next(new Unauthorized(''));
+      const token = jwt
+        .sign({ _id: users._id }, 'some-secret-key', { expiresIn: '7d' });
+      res
+        .send({ token });
     })
+    .catch(next);
+};
+
+module.exports.updateUser = (req, res, next) => {
+  User
+    .indByIdAndUpdate(req.user._id)
+    .orFail(() => {
+      throw new NotFound('Пользователь 33333333333333 не найден');
+    })
+    .then((users) => res
+      .status(200)
+      .send({ users }))
     .catch((err) => {
-      if (err.message.includes('Validation')) {
-        next(new BadRequest(''));
-      }
       if (err.name === 'CastError') {
-        next(new BadRequest(''));
+        next(new BadRequest('Переданы некорректные 8888888888888888 данные'));
+      } else {
+        next(err);
       }
-      if (err.message.includes('E11000')) {
-        next(new EvilMail());
-      }
-      next(err);
     });
 };
