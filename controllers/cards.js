@@ -1,96 +1,72 @@
 const Card = require('../models/card');
 const NotFound = require('../errors/NotFound');
 const Forbidden = require('../errors/Forbidden');
+const BadRequest = require('../errors/BadRequest');
 
-module.exports.addLike = (req, res) => {
+module.exports.addLike = (req, res, next) => {
   Card
     .findByIdAndUpdate(
       req.params.cardId,
-      { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
+      { $addToSet: { likes: req.user._id } }, // убрать _id из массива
       { new: true },
-    )
-    .then((cards) => {
-      if (!cards) {
-        res
-          .status(404)
-          .send({ message: 'Карточка КТО СКРУТИЛ не найдена' });
-      }
-      res
-        .send(cards);
+    ).orFail(() => {
+      throw new NotFound('Карточка 666666666 не найдена');
     })
+    .then((card) => res
+      .status(200)
+      .send(card))
     .catch((err) => {
       if (err.name === 'CastError') {
-        res
-          .status(400)
-          .send({ message: 'Переданы некорректные И ДЛЯ ЧЕГО данные' });
+        next(new BadRequest('Переданы некорректные 8888888 данные'));
+      } else {
+        next(err);
       }
-      res
-        .status(500).send({ message: 'Ошибка НЕРВЫ СЕРДЦА ТВОЕГО сервера' });
     });
 };
 
-module.exports.deleteLike = (req, res) => {
+module.exports.deleteLike = (req, res, next) => {
   Card
     .findByIdAndUpdate(
       req.params.cardId,
       { $pull: { likes: req.user._id } }, // убрать _id из массива
       { new: true },
-    )
-    .then((cards) => {
-      if (!cards) {
-        res
-          .status(404)
-          .send({ message: 'Карточка ЧЬЕЮ СТРАШНОЮ РУКОЙ не найдена' });
-      }
-      res
-        .send(cards);
+    ).orFail(() => {
+      throw new NotFound('Карточка 000000 не найдена');
     })
+    .then((card) => res
+      .status(200)
+      .send(card))
     .catch((err) => {
       if (err.name === 'CastError') {
-        res
-          .status(400)
-          .send({ message: 'Переданы некорректные ТЫ БЫЛ ВЫКОВАН данные' });
+        next(new BadRequest('Переданы некорректные09876 данные'));
+      } else {
+        next(err);
       }
-      res
-        .status(500)
-        .send({ message: 'Ошибка ТАКОЙ сервера' });
     });
 };
 
-module.exports.getCards = (req, res) => {
+module.exports.getCards = (req, res, next) => {
   Card
     .find({})
-    .then(
-      (cards) => (
-        res
-          .status(200)
-          .send(cards)),
-    ).catch(() => res
-      .status(500)
-      .send({ message: 'Ошибка ЧЕЙ БЫЛ МОЛОТ сервера' }));
+    .then((cards) => res
+      .status(200)
+      .send(cards))
+    .catch(next);
 };
 
-module.exports.createCard = (req, res) => {
+module.exports.createCard = (req, res, next) => {
   const { name, link } = req.body;
   const owner = req.user._id;
-  return Card
+  Card
     .create({ name, link, owner })
-    .then((cards) => {
-      res
-        .status(201)
-        .send(cards);
-    })
+    .then((card) => res
+      .status(201)
+      .send(card))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res
-          .status(400)
-          .send({
-            message: 'Переданы некорректные ЦЕПИ ЧЬИ данные',
-          });
+        next(new BadRequest('Переданы некорректные DGHFDSDG данные'));
       } else {
-        res
-          .status(500)
-          .send({ message: 'Ошибка ЧТОБ СКРЕПИТЬ сервера' });
+        next(err);
       }
     });
 };
