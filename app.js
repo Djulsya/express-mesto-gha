@@ -16,7 +16,7 @@ const { PORT = 3000 } = process.env;
 const app = express();
 
 const {
-  validateCreateUser, validateLogin,
+  joiValidateCreateUser, joiValidateLogin,
 } = require('./middlewares/valid');
 
 mongoose.connect('mongodb://localhost:27017/mestodb', {
@@ -34,8 +34,8 @@ app.use(express.json());
 app.use(usersRouter);
 app.use(cardsRouter);
 app.use(helmet());
-app.post('/signin', login, validateLogin);
-app.post('/signup', createUser, validateCreateUser);
+app.post('/signin', login, joiValidateLogin);
+app.post('/signup', createUser, joiValidateCreateUser);
 app.use(auth);
 app.use(router);
 

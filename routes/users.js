@@ -7,14 +7,14 @@ const {
 } = require('../controllers/users');
 
 const {
-  validateGetUserId, validateAvatar, validateUserAbout,
+  joiValidateGetUserId, joiValidateAvatar, joiValidateUserAbout,
 } = require('../middlewares/valid');
 
 usersRouter.get('/users', getUsers);
-usersRouter.get('/users/:userId', getUserId, validateGetUserId);
+usersRouter.get('/users/:userId', getUserId, joiValidateGetUserId);
 // usersRouter.get('/users/me', updateUser);
 // usersRouter.post('/users', createUser);
-usersRouter.patch('/users/me', updateUserAbout, validateUserAbout);
-usersRouter.patch('/users/me/avatar', updateUserAvatar, validateAvatar);
+usersRouter.patch('/users/me', updateUserAbout, joiValidateUserAbout);
+usersRouter.patch('/users/me/avatar', updateUserAvatar, joiValidateAvatar);
 
 module.exports = usersRouter;

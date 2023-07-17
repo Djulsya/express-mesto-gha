@@ -2,51 +2,51 @@
 const { celebrate } = require('celebrate');
 const Joi = require('joi');
 
-const validateURL = /(https?:\/\/(www\.)?)[-._~:/?#@!&'()*+,;=]*#*/m;
+// const validateURL = /(https?:\/\/(www\.)?)[-._~:/?#@!&'()*+,;=]*#*/m;
 
-module.exports.validateCreateUser = celebrate({
+module.exports.joiValidateCreateUser = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
-    avatar: Joi.string().pattern(validateURL).required(),
+    avatar: Joi.string().required(), // pattern(validateURL)
     email: Joi.string().email().required(),
     password: Joi.string().required(),
   }),
 });
 
-module.exports.validateGetUserId = celebrate({
+module.exports.joiValidateGetUserId = celebrate({
   params: Joi.object().keys({
-    userId: Joi.string().pattern(validateURL).required(),
+    userId: Joi.string().required(), // pattern(validateURL)
   }),
 });
 
-module.exports.validateLogin = celebrate({
+module.exports.joiValidateLogin = celebrate({
   body: Joi.object().keys({
     email: Joi.string().email().required(),
     password: Joi.string().required(),
   }),
 });
 
-module.exports.validateCards = celebrate({
+module.exports.joiValidateCards = celebrate({
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
-    link: Joi.string().pattern(validateURL).required(),
+    link: Joi.string().required(), // pattern(validateURL)
   }),
 });
 
-module.exports.validateCardId = celebrate({
+module.exports.joiValidateCardId = celebrate({
   params: Joi.object().keys({
     cardId: Joi.string().hex().length(24),
   }),
 });
 
-module.exports.validateAvatar = celebrate({
+module.exports.joiValidateAvatar = celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string().pattern(validateURL),
+    avatar: Joi.string(), // pattern(validateURL)
   }),
 });
 
-module.exports.validateUserAbout = celebrate({
+module.exports.joiValidateUserAbout = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
     about: Joi.string().min(2).max(30),
