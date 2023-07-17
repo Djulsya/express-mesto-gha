@@ -44,10 +44,16 @@ router.use((req, res, next) => {
 });
 router.use(express.json());
 
-app.use((req, res) => {
-  res.status(404).send({
-    message: 'Запрашиваемый адрес не найден.',
-  });
+app.use((err, req, res, next) => {
+  const { statusCode = 500, message } = err;
+  res
+    .status(statusCode)
+    .send({
+      message: statusCode === 403
+        ? 'Недостаточно прав'
+        : message,
+    });
+  next();
 });
 
 app.use(errors());
