@@ -1,9 +1,10 @@
+/* eslint-disable consistent-return */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable import/no-unresolved */
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const NotFound = require('../errors/NotFound');
+const EvilMail = require('../errors/EvilMail');
 const BadRequest = require('../errors/BadRequest');
 
 module.exports.getUsers = (req, res) => {
@@ -44,7 +45,7 @@ module.exports.getUserId = (req, res) => {
     });
 };
 
-module.exports.createUser = (req, res) => {
+module.exports.createUser = (req, res, next) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
@@ -63,16 +64,15 @@ module.exports.createUser = (req, res) => {
           });
       }))
     .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res
-          .status(400)
-          .send({ message: 'Переданы некорректные ЧЕЙ БЕССМЕРТНЫЙ ВЗОР данные' });
-      } else {
-        res
-          .status(500)
-          .send({ message: 'Ошибка ЛЮБЯ сервера' });
+      if (err.code === 11000) {
+        return next(new EvilMail('Пользователь с таким email-адресом уже зарегестрирован'));
       }
-    });
+      if (err.name === 'ValidationError') {
+        return next(new BadRequest('Переданы некорректные 123 данные'));
+      }
+      next(err);
+    })
+    .catch(next);
 };
 
 module.exports.updateUserAbout = (req, res) => {
@@ -148,22 +148,4 @@ module.exports.login = (req, res, next) => {
         .send({ token });
     })
     .catch(next);
-};
-
-module.exports.updateUser = (req, res, next) => {
-  User
-    .indByIdAndUpdate(req.user._id)
-    .orFail(() => {
-      throw new NotFound('Пользователь 33333333333333 не найден');
-    })
-    .then((users) => res
-      .status(200)
-      .send({ users }))
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new BadRequest('Переданы некорректные 8888888888888888 данные'));
-      } else {
-        next(err);
-      }
-    });
 };
