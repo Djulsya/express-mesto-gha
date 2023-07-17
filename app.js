@@ -10,6 +10,10 @@ const { PORT = 3000 } = process.env;
 
 const app = express();
 
+const {
+  validateCreateUser,
+} = require('./middlewares/valid');
+
 mongoose.connect('mongodb://localhost:27017/mestodb', {
   useNewUrlParser: true,
 });
@@ -26,7 +30,7 @@ app.use(usersRouter);
 app.use(cardsRouter);
 app.use(helmet());
 app.post('/signin', login);
-app.post('/signup', createUser);
+app.post('/signup', createUser, validateCreateUser);
 
 // app.use((req, res) => {
 //   res.status(404)
