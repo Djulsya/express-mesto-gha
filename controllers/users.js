@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const EvilMail = require('../errors/EvilMail');
 const BadRequest = require('../errors/BadRequest');
+const NotFound = require('../errors/NotFound');
 
 module.exports.getUsers = (req, res) => {
   User
@@ -148,4 +149,22 @@ module.exports.login = (req, res, next) => {
         .send({ token });
     })
     .catch(next);
+};
+
+module.exports.updateUser = (req, res, next) => {
+  User
+    .indByIdAndUpdate(req.user._id)
+    .orFail(() => {
+      throw new NotFound('Пользователь 33333333333333 не найден');
+    })
+    .then((users) => res
+      .status(200)
+      .send({ users }))
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new BadRequest('Переданы некорректные 8888888888888888 данные'));
+      } else {
+        next(err);
+      }
+    });
 };
