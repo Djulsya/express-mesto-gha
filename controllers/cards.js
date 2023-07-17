@@ -103,14 +103,16 @@ module.exports.deleteCard = (req, res, next) => {
       throw new NotFound('Карточка 55555555555 не найдена');
     })
     .then((card) => {
-      if (!card.owner
+      if (card.owner
         .toString() === req.user._id) {
-        next(new Forbidden('Невозможно удалить карточку'));
+        Card
+          .findByIdAndRemove(cardId)
+          .then(() => res
+            .status(200)
+            .send(card));
+      } else {
+        throw new Forbidden('Невозможно удалить карточку');
       }
-      card
-        .remove()
-        .then(() => res
-          .send({ message: 'Удалено' }));
     })
     .catch(next);
 };
