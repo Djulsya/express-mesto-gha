@@ -45,7 +45,7 @@ router.use((req, res, next) => {
 router.use(express.json());
 
 app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
+  const { statusCode = 403, message } = err;
   res
     .status(statusCode)
     .send({
