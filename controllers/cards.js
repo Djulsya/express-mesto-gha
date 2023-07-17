@@ -1,4 +1,6 @@
 const Card = require('../models/card');
+const NotFound = require('../errors/NotFound');
+const Forbidden = require('../errors/Forbidden');
 
 module.exports.addLike = (req, res) => {
   Card
@@ -93,22 +95,22 @@ module.exports.createCard = (req, res) => {
     });
 };
 
-module.exports.deleteCard = (req, res) => {
+module.exports.deleteCard = (req, res, next) => {
   const { cardId } = req.params;
   return Card
     .findByIdAndDelete(cardId)
-    .then(() => res.status(200).send({ message: 'Удалено' }))
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        res
-          .status(400)
-          .send({
-            message: 'Переданы некорректные КТО ВЗМЕТНУЛ ТВОЙ БЫСТРЫЙ ВЗМАХ данные',
-          });
-      } else {
-        res
-          .status(500)
-          .send({ message: 'Ошибка УХВАТИЛ СМЕРТЕЛЬНЫЙ СТРАХ сервера' });
+    .orFail(() => {
+      throw new NotFound('Карточка 55555555555 не найдена');
+    })
+    .then((card) => {
+      if (!card.owner
+        .toString() === req.user._id) {
+        next(new Forbidden('Невозможно удалить карточку'));
       }
-    });
+      card
+        .remove()
+        .then(() => res
+          .send({ message: 'Удалено' }));
+    })
+    .catch(next);
 };
