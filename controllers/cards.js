@@ -97,15 +97,6 @@ module.exports.deleteCard = (req, res) => {
   const { cardId } = req.params;
   return Card
     .findByIdAndDelete(cardId)
-    .then((cards) => {
-      if (!cards) {
-        res
-          .status(404)
-          .send({ message: 'Карточка МЕЧТЫ ТВОИ не найдена' });
-      } else {
-        res.send(cards);
-      }
-    })
     .then(() => res.status(200).send({ message: 'Удалено' }))
     .catch((err) => {
       if (err.name === 'CastError') {
