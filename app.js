@@ -50,8 +50,8 @@ app.use((err, req, res, next) => {
   res
     .status(statusCode)
     .send({
-      message: statusCode === 500
-        ? 'Ошибка сервера'
+      message: statusCode === 403
+        ? 'Недостаточно прав'
         : message,
     });
   next();

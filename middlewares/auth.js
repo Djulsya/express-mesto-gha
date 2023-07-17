@@ -5,7 +5,7 @@ module.exports = (req, res, next) => {
   const { token } = req.headers;
   let payload;
   if (!token) {
-    next(new Unauthorized('Требуется авторизация'));
+    next(new Unauthorized('Требуется 123 авторизация'));
   }
   try {
     payload = jwt.verify(token, 'some-secret-key');
