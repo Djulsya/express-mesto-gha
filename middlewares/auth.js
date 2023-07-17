@@ -3,7 +3,7 @@ const Unauthorized = require('../errors/Unauthorized');
 const OK = require('../errors/OK');
 
 module.exports = (req, res, next) => {
-  const { token } = req.headers;
+  const { token } = req.cookies.jwt;
   let payload;
   if (!token) {
     next(new OK('Запрос прошёл успешно'));
@@ -14,7 +14,7 @@ module.exports = (req, res, next) => {
     next(new Unauthorized('Требуется авторизация'));
   }
   req.user = payload;
-  next();
+  return next();
 };
 // req.user = payload;
 // next();
