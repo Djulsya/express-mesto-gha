@@ -1,8 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const { celebrate, Joi } = require('celebrate');
 
-// const validateURL = /(https?:\/\/(www\.)?)[-._~:/?#@!&'()*+,;=]*#*/m;
-
 module.exports.joiValidateCreateUser = celebrate({
   body: Joi.object().keys({
     name: Joi.string().min(2).max(30),
