@@ -40,21 +40,20 @@ app.use(auth);
 app.use(router);
 app.use(errors());
 
+const handleError = ((err, req, res, next) => {
+  if (err.statusCode) {
+    res.status(err.statusCode).send({ message: err.message });
+  } else {
+    res.status(500).send({ message: 'Ошибка сервера' });
+  }
+
+  return next();
+});
+
 router.use((req, res, next) => {
   next(new NotFound('Страница не найдена'));
 });
 router.use(express.json());
-
-app.use((err, req, res, next) => {
-  const { statusCode = 403, message } = err;
-  res
-    .status(statusCode)
-    .send({
-      message: statusCode === 403
-        ? 'Недостаточно прав'
-        : message,
-    });
-  next();
-});
+app.use(handleError);
 
 app.listen(PORT);
