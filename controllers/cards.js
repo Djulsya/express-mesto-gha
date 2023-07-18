@@ -47,7 +47,7 @@ module.exports.deleteLike = (req, res, next) => {
     });
 };
 
-module.exports.getCards = (req, res) => {
+module.exports.getCards = (req, res, next) => {
   Card
     .find({})
     .then(
@@ -55,9 +55,7 @@ module.exports.getCards = (req, res) => {
         res
           .status(200)
           .send(cards)),
-    ).catch(() => res
-      .status(500)
-      .send({ message: 'Ошибка сервера' }));
+    ).catch(next);
 };
 
 module.exports.createCard = (req, res, next) => {

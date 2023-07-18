@@ -6,7 +6,7 @@ const BadRequest = require('../errors/BadRequest');
 const EvilMail = require('../errors/EvilMail');
 const Unauthorized = require('../errors/Unauthorized');
 
-module.exports.getUsers = (req, res) => {
+module.exports.getUsers = (req, res, next) => {
   User
     .find({})
     .then(
@@ -14,9 +14,7 @@ module.exports.getUsers = (req, res) => {
         res
           .status(200)
           .send(users)),
-    ).catch(() => res
-      .status(500)
-      .send({ message: 'Ошибка сервера' }));
+    ).catch(next);
 };
 
 module.exports.getUserId = (req, res, next) => {
