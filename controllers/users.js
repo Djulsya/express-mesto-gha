@@ -161,10 +161,10 @@ module.exports.getActualUser = (req, res, next) => { // updateUser
       res.status(200).send(users);
     })
     .catch((err) => {
-      if (err.name === 'CastError') {
-        next(BadRequest('Переданы некорректные данные'));
-      } else if (err.message === 'NotFound') {
-        next(new NotFound('Пользователь не найден'));
-      } else next(err);
-    });
+      if (err.name === 'ValidationError') {
+        throw new BadRequest('Переданы некорректные данные');
+      }
+      throw err;
+    })
+    .catch(next);
 };
