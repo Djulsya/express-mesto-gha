@@ -162,9 +162,9 @@ module.exports.getActualUser = (req, res, next) => { // updateUser
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        throw new BadRequest('Переданы некорректные данные');
+        next(new BadRequest('Переданы некорректные данные'));
+      } else {
+        next(err);
       }
-      throw err;
-    })
-    .catch(next);
+    });
 };
