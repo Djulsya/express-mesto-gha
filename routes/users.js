@@ -3,13 +3,17 @@ const express = require('express');
 const usersRouter = express.Router();
 
 const {
-  getUsers, getUserId, createUser, updateUserAbout, updateUserAvatar,
+  JoiValidateUserId, JoiValidateAbout, JoiValidateAvatar,
+} = require('../middlewares/valid');
+
+const {
+  getUsers, updateUser, getUserId, updateUserAbout, updateUserAvatar,
 } = require('../controllers/users');
 
 usersRouter.get('/users', getUsers);
-usersRouter.get('/users/:userId', getUserId);
-usersRouter.post('/users', createUser);
-usersRouter.patch('/users/me', updateUserAbout);
-usersRouter.patch('/users/me/avatar', updateUserAvatar);
+usersRouter.get('/users/me', updateUser);
+usersRouter.get('/users/:id', JoiValidateUserId, getUserId);
+usersRouter.patch('/users/me', JoiValidateAbout, updateUserAbout);
+usersRouter.patch('/users/me/avatar', JoiValidateAvatar, updateUserAvatar);
 
 module.exports = usersRouter;
