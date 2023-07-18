@@ -68,17 +68,18 @@ module.exports.createUser = (req, res, next) => {
 
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
-  return User
+  User
     .findOne({ email })
     .select('+password')
     .then((users) => {
       if (!users) {
-        next(new Unauthorized('Ошибка авторизации'));
+        return next(new Unauthorized('Ошибка авторизации'));
       }
       return bcrypt.compare(password, users.password)
+        // eslint-disable-next-line consistent-return
         .then((matched) => {
           if (!matched) {
-            next(new Unauthorized('Ошибка авторизации'));
+            return next(new Unauthorized('Ошибка авторизации'));
           }
           const token = jwt
             .sign({ _id: users._id }, 'some-secret-key', { expiresIn: '7d' });
