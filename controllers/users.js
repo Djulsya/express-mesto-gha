@@ -23,11 +23,11 @@ module.exports.getUserId = (req, res, next) => {
   const { id } = req.params;
   return User
     .findById(id)
-    .then((users) => {
-      if (!users) {
+    .then((user) => {
+      if (!user) {
         throw new NotFound('Пользователь не найден');
       }
-      res.send(users);
+      res.send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
@@ -151,8 +151,9 @@ module.exports.updateUserAvatar = (req, res, next) => {
     });
 };
 
-module.exports.updateUser = (req, res, next) => {
-  User.findById(req.user._id)
+module.exports.getActualUser = (req, res, next) => { // updateUser
+  User
+    .findById(req.user._id)
     .then((users) => {
       if (!users) {
         throw new NotFound('Пользователь не найден');

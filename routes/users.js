@@ -7,11 +7,11 @@ const {
 } = require('../middlewares/valid');
 
 const {
-  getUsers, updateUser, getUserId, updateUserAbout, updateUserAvatar,
+  getUsers, getActualUser, getUserId, updateUserAbout, updateUserAvatar,
 } = require('../controllers/users');
 
 usersRouter.get('/users', getUsers);
-usersRouter.get('/users/me', updateUser);
+usersRouter.get('/users/me', getActualUser);
 usersRouter.get('/users/:id', JoiValidateUserId, getUserId);
 usersRouter.patch('/users/me', JoiValidateAbout, updateUserAbout);
 usersRouter.patch('/users/me/avatar', JoiValidateAvatar, updateUserAvatar);
