@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const { errors } = require('celebrate');
 const usersRouter = require('./routes/users');
 const cardsRouter = require('./routes/cards');
+const NotFound = require('./errors/NotFound');
 
 const {
   login, createUser,
@@ -34,11 +35,10 @@ app.use(auth);
 
 app.use('/cards', cardsRouter);
 app.use('/users', usersRouter);
-app.use('*', (req, res) => {
-  res.status(404).send({
-    message: 'Запрашиваемый адрес не найден.',
-  });
-});
+
+app.all('*', auth, (req, res, next) => next(
+  new NotFound('Запрашиваемый адрес не найден'),
+));
 
 const handleError = ((err, req, res, next) => {
   const { statusCode = 500, message } = err;
