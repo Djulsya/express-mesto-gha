@@ -150,7 +150,7 @@ module.exports.updateUserAvatar = (req, res, next) => {
     });
 };
 
-module.exports.getActualUser = (req, res, next) => { // updateUser
+module.exports.getActualUser = (req, res, next) => {
   User
     .findById(req.user._id)
     .then((users) => {
