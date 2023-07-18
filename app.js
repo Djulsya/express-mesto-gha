@@ -32,8 +32,8 @@ app.post('/signup', JoiValidateCreateUser, createUser);
 
 app.use(auth);
 
-app.use(cardsRouter);
-app.use(usersRouter);
+app.use('/cards', cardsRouter);
+app.use('/users', usersRouter);
 app.use('*', (req, res) => {
   res.status(404).send({
     message: 'Запрашиваемый адрес не найден.',
