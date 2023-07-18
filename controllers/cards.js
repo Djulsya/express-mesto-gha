@@ -26,7 +26,8 @@ module.exports.addLike = (req, res, next) => {
 };
 
 module.exports.deleteLike = (req, res, next) => {
-  Card
+  const { id } = req.params;
+  return Card
     .findByIdAndUpdate(
       req.params.id,
       { $pull: { likes: req.user._id } }, // убрать _id из массива
@@ -35,16 +36,18 @@ module.exports.deleteLike = (req, res, next) => {
     .orFail(() => {
       throw new NotFound('Карточка не найдена');
     })
-    .then((cards) => res
-      .status(200)
-      .send(cards))
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new BadRequest('Переданы некорректные данные'));
+    .then((card) => {
+      if (card.owner.toString() === req.user._id) {
+        Card
+          .findById(id)
+          .then(() => res
+            .status(200)
+            .send(card));
       } else {
-        next(err);
+        throw new Forbidden('Недостаточно прав для действия');
       }
-    });
+    })
+    .catch(next);
 };
 
 module.exports.getCards = (req, res, next) => {
