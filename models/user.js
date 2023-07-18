@@ -4,7 +4,6 @@ const validator = require('validator');
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, 'Поле "Имя" должно быть заполнено'],
     minlength: [2, 'Минимальная длина поля "Имя" - 2'],
     maxlength: [30, 'Максимальная длина поля "Имя" - 30'],
     default: 'Жак-Ив Кусто',
@@ -12,7 +11,6 @@ const userSchema = new mongoose.Schema({
 
   about: {
     type: String,
-    required: [true, 'Поле "О себе" должно быть заполнено'],
     minlength: [2, 'Минимальная длина поля "О себе" - 2'],
     maxlength: [30, 'Максимальная длина поля "О себе" - 30'],
     default: 'Исследователь',
