@@ -86,7 +86,7 @@ module.exports.createCard = (req, res, next) => {
 
 module.exports.deleteCard = (req, res, next) => {
   const { id } = req.params;
-  Card
+  return Card
     .findById(id)
     .then((cards) => {
       if (!cards) {
