@@ -86,14 +86,17 @@ module.exports.createCard = (req, res, next) => {
 
 module.exports.deleteCard = (req, res, next) => {
   const { id } = req.params;
-  return Card
-    .findByIdAndDelete(id)
+  Card
+    .findById(id)
     .then((cards) => {
       if (!cards) {
         next(new NotFound('Карточка не найдена'));
+        return;
       }
       if (!cards.owner.equals(req.user._id)) {
         next(new Forbidden('Недостаточно прав'));
+        // eslint-disable-next-line no-useless-return
+        return;
       }
     })
     .then(() => res.status(200)
