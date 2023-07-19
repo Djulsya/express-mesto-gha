@@ -86,9 +86,7 @@ module.exports.login = (req, res, next) => {
           res.cookie('jwt', token, {
             httpOnly: true,
           });
-        })
-        .then(() => res
-          .send({ message: 'Всё прошло успешно' }));
+        });
     })
     .catch(next);
 };
