@@ -43,8 +43,6 @@ module.exports.deleteLike = (req, res, next) => {
           .then(() => res
             .status(200)
             .send(card));
-      } else {
-        throw new Forbidden('Недостаточно прав');
       }
     })
     .catch(next);
