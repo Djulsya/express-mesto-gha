@@ -103,15 +103,10 @@ module.exports.updateUserAbout = (req, res, next) => {
     .then((users) => {
       res
         .send(users);
-    }).catch((err) => {
-      if (err.message === 'NotFoundError') {
-        res
-          .status(404)
-          .send({ message: 'Пользователь не найден' });
-      } else if (err.name === 'ValidationError') {
-        res
-          .status(400)
-          .send({ message: 'Переданы некорректные данные' });
+    })
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new BadRequest('Переданы некорректные данные'));
       } else {
         next(err);
       }
