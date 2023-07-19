@@ -87,11 +87,10 @@ module.exports.createCard = (req, res, next) => {
 module.exports.deleteCard = (req, res, next) => {
   const { id } = req.params;
   return Card
-    .findById(id)
+    .findByIdAndDelete(id)
     .then((cards) => {
       if (!cards) {
         next(new NotFound('Карточка не найдена'));
-        return;
       }
       if (!cards.owner.equals(req.user._id)) {
         next(new Forbidden('Недостаточно прав'));
