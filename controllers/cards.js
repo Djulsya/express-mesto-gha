@@ -95,8 +95,6 @@ module.exports.deleteCard = (req, res, next) => {
       }
       if (!cards.owner.equals(req.user._id)) {
         next(new Forbidden('Недостаточно прав'));
-        // eslint-disable-next-line no-useless-return
-        return;
       }
     })
     .then(() => res.status(200)
