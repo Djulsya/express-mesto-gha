@@ -103,7 +103,8 @@ module.exports.deleteCard = (req, res, next) => {
       if (err.name === 'CastError') {
         next(new BadRequest('Переданы некорректные данные'));
       } else {
-        next(err);
+        throw new Forbidden('Недостаточно прав');
       }
-    });
+    })
+    .catch(next);
 };
