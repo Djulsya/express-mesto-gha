@@ -84,22 +84,17 @@ module.exports.deleteCard = (req, res, next) => {
   const { id } = req.params;
   return Card
     .findById(id)
-    .then((card) => {
-      if (!card) {
-        next(new NotFound('Карточка не найдена'));
-        return;
-      }
-      if (!card.owner.equals(req.user._id)) {
-        next(new Forbidden('Недостаточно прав'));
-        // eslint-disable-next-line no-useless-return
-        return;
-      }
+    .orFail(() => {
+      throw new NotFound('Карточка не найдена');
     })
-    .then(() => res.status(200)
-      .send({ message: 'Удалено' }))
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new BadRequest('Переданы некорректные данные'));
+    .then((card) => {
+      if (card.owner
+        .toString() === req.user._id) {
+        Card
+          .findByIdAndRemove(id)
+          .then(() => res
+            .status(200)
+            .send(card));
       } else {
         throw new Forbidden('Недостаточно прав');
       }
