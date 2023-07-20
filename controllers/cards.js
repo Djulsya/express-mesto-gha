@@ -13,9 +13,9 @@ module.exports.addLike = (req, res, next) => {
     .orFail(() => {
       throw new NotFound('Карточка не найдена');
     })
-    .then((cards) => res
+    .then((card) => res
       .status(200)
-      .send(cards))
+      .send(card))
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new BadRequest('Переданы некорректные данные'));
@@ -64,10 +64,10 @@ module.exports.createCard = (req, res, next) => {
   const owner = req.user._id;
   return Card
     .create({ name, link, owner })
-    .then((cards) => {
+    .then((card) => {
       res
         .status(201)
-        .send(cards);
+        .send(card);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -86,12 +86,12 @@ module.exports.deleteCard = (req, res, next) => {
   const { id } = req.params;
   return Card
     .findByIdAndDelete(id)
-    .then((cards) => {
-      if (!cards) {
+    .then((card) => {
+      if (!card) {
         next(new NotFound('Карточка не найдена'));
         return;
       }
-      if (!cards.owner.equals(req.user._id)) {
+      if (!card.owner.equals(req.user._id)) {
         next(new Forbidden('Недостаточно прав'));
         // eslint-disable-next-line no-useless-return
         return;
