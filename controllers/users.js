@@ -83,9 +83,10 @@ module.exports.login = (req, res, next) => {
           }
           const token = jwt
             .sign({ _id: users._id }, 'some-secret-key', { expiresIn: '7d' });
-          res.cookie('jwt', token, {
-            httpOnly: true,
-          })
+          res
+            .cookie('jwt', token, {
+              httpOnly: true,
+            })
             .send({ token });
         });
     })

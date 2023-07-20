@@ -37,7 +37,6 @@ module.exports.deleteLike = (req, res, next) => {
       throw new NotFound('Карточка не найдена');
     })
     .then((card) => {
-      // if (card.owner.toString() === req.user._id) {
       Card
         .findById(id)
         .then(() => res
