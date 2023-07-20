@@ -92,9 +92,9 @@ module.exports.deleteCard = (req, res, next) => {
         .toString() === req.user._id) {
         Card
           .findByIdAndRemove(id)
-          .then(() => res
-            .status(200)
-            .send(card));
+          .then(() => {
+            res.send({ message: 'Удалено!' });
+          });
       } else {
         throw new Forbidden('Недостаточно прав');
       }
