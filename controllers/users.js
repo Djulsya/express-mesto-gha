@@ -48,12 +48,12 @@ module.exports.createUser = (req, res, next) => {
       avatar,
       password: hash,
     }))
-    .then((users) => res.status(201).send({
-      name: users.name,
-      about: users.about,
-      avatar: users.avatar,
-      _id: users._id,
-      email: users.email,
+    .then((user) => res.status(201).send({
+      name: user.name,
+      about: user.about,
+      avatar: user.avatar,
+      _id: user._id,
+      email: user.email,
     }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -71,18 +71,18 @@ module.exports.login = (req, res, next) => {
   User
     .findOne({ email })
     .select('+password')
-    .then((users) => {
-      if (!users) {
+    .then((user) => {
+      if (!user) {
         return next(new Unauthorized('Ошибка авторизации'));
       }
-      return bcrypt.compare(password, users.password)
+      return bcrypt.compare(password, user.password)
         // eslint-disable-next-line consistent-return
         .then((matched) => {
           if (!matched) {
             return next(new Unauthorized('Ошибка авторизации'));
           }
           const token = jwt
-            .sign({ _id: users._id }, 'some-secret-key', { expiresIn: '7d' });
+            .sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
           res
             .cookie('jwt', token, {
               httpOnly: true,
@@ -100,10 +100,10 @@ module.exports.updateUserAbout = (req, res, next) => {
       req.user._id,
       { name, about },
       { runValidators: true, new: true },
-    ).orFail(() => new NotFound('NotFoundError'))
-    .then((users) => {
+    ).orFail(() => new NotFound('Пользователь не найден'))
+    .then((user) => {
       res
-        .send(users);
+        .send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -121,24 +121,14 @@ module.exports.updateUserAvatar = (req, res, next) => {
       req.user._id,
       { avatar },
       { runValidators: true, new: true },
-    ).orFail(() => new NotFound('NotFoundError'))
-    .then((users) => {
-      if (!users) {
-        res
-          .status(404)
-          .send({ message: 'Пользователь не найден' });
-      }
+    ).orFail(() => new NotFound('Пользователь не найден'))
+    .then((user) => {
       res
-        .send(users);
-    }).catch((err) => {
+        .send(user);
+    })
+    .catch((err) => {
       if (err.name === 'ValidationError') {
-        res
-          .status(400)
-          .send({ message: 'Переданы некорректные данные' });
-      } else if (err.message === 'NotFoundError') {
-        res
-          .status(404)
-          .send({ message: 'Пользователь не найден' });
+        next(new BadRequest('Переданы некорректные данные'));
       } else {
         next(err);
       }
@@ -148,11 +138,11 @@ module.exports.updateUserAvatar = (req, res, next) => {
 module.exports.getActualUser = (req, res, next) => {
   User
     .findById(req.user._id)
-    .then((users) => {
-      if (!users) {
+    .then((user) => {
+      if (!user) {
         throw new NotFound('Пользователь не найден');
       }
-      res.status(200).send(users);
+      res.status(200).send(user);
     })
     .catch(next);
 };
