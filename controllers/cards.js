@@ -83,7 +83,7 @@ module.exports.createCard = (req, res, next) => {
 module.exports.deleteCard = (req, res, next) => {
   const { id } = req.params;
   return Card
-    .findByIdAndDelete(id)
+    .findById(id)
     .then((card) => {
       if (!card) {
         next(new NotFound('Карточка не найдена'));
