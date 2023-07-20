@@ -88,7 +88,9 @@ module.exports.login = (req, res, next) => {
             .cookie('jwt', token, {
               httpOnly: true,
             })
-            .send({});
+            .send({
+              name: user.name, about: user.about, avatar: user.avatar, email,
+            });
         });
     })
     .catch(next);
