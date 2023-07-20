@@ -75,7 +75,8 @@ module.exports.login = (req, res, next) => {
       if (!user) {
         return next(new Unauthorized('Ошибка авторизации'));
       }
-      return bcrypt.compare(password, user.password)
+      return bcrypt
+        .compare(password, user.password)
         // eslint-disable-next-line consistent-return
         .then((matched) => {
           if (!matched) {
