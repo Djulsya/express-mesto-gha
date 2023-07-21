@@ -36,13 +36,6 @@ module.exports.deleteLike = (req, res, next) => {
     .orFail(() => {
       throw new NotFound('Карточка не найдена');
     })
-    .then((card) => {
-      Card
-        .findById(id)
-        .then(() => res
-          .status(200)
-          .send(card));
-    })
     .catch(next);
 };
 
