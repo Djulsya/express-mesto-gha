@@ -69,11 +69,7 @@ module.exports.createCard = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res
-          .status(400)
-          .send({
-            message: 'Переданы некорректные данные',
-          });
+        next(new BadRequest('Переданы некорректные данные'));
       } else {
         next(err);
       }
